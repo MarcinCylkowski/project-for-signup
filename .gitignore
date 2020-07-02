@@ -1,6 +1,7 @@
 # Compiled class file
 *.class
-
+.idea
+project-for-signup.iml
 # Log file
 *.log
 
