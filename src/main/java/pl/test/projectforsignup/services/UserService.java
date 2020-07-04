@@ -2,6 +2,7 @@ package pl.test.projectforsignup.services;
 
 
 import org.springframework.stereotype.Service;
+import pl.test.projectforsignup.exceptions.ResourceNotFoundException;
 import pl.test.projectforsignup.models.UserClass;
 import pl.test.projectforsignup.repositories.UserRepository;
 
@@ -27,8 +28,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public UserClass updateUser(UserClass userClass){
-        return userRepository.save(userClass);
+    public UserClass updateUser(long id, UserClass user){
+        return userRepository.findById(id).map(u -> {
+            u.setUserName(user.getUserName());
+            u.setPassword(user.getPassword());
+            u.setUserRoles(user.getUserRoles());
+            return userRepository.save(u);
+        }).orElseThrow(() -> new ResourceNotFoundException("User was not found"));
     }
-
 }
